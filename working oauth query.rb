@@ -4,13 +4,18 @@ require 'json'
 
  class GetData
     @@base_url = "https://api.spotify.com/v1"
-
-    def post
-        newUrl = @@base_url + '/artists/0TnOYISbd1XYRBk9myaseg'
-       key = RestClient.get(newUrl, 'Authorization' => 'Bearer BQCEBBKa0zpiEltmXIRPSuG0GUMD5Aa9pCED89utQTdG8V1FcvWZKqJtlCpKtcEXWirnamCst6dv2pe-Xp45qxITopscjic6VdIb8G2f1rqQDQjmCO0F1KI2I1qoQOBxDu1ks3xKrQ3Sub485jU')
-        puts key
+    attr_accessor :access_token
+    def initialize
+        @access_token = nil
     end
 
+    def post
+        token = RestClient.post('https://accounts.spotify.com/api/token',
+            {'grant_type': 'client_credentials'},
+            {'Authorization': 'Basic YzhjZTljY2NiMDczNDg2YmE5OTJkNGUyOTM0NzBhNzA6N2ZmYTRlY2Q4Yjk1NDQ2OGJlMTI2ZGZiZDY1MGU1NWM='})
+
+        @access_token = JSON.parse(token)['access_token']
+    end
     
  end
 
