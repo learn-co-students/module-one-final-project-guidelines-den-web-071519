@@ -2,7 +2,7 @@ require 'rest-client'
 require 'pry'
 require 'json'
 
- module GetData
+ class GetData
     @@base_url = "https://api.spotify.com/v1"
     attr_accessor :access_token
     def self.access_token
