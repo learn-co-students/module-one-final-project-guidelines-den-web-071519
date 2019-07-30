@@ -46,7 +46,7 @@ class Search
             selected_song = display_tracks[song_select.to_i]
             puts "#{selected_song[:title]} - #{selected_song[:artist]}"
             #add song saver method here !!!
-            binding.pry
+            # binding.pry
         elsif search_type == 'artist'
             display_artists = parsed['artists']['items'].map{|artist| artist['name']}
             display_artists

@@ -1,59 +1,57 @@
 require_relative '../config/environment'
 require 'pry'
-    current_user = nil
-    def create_user
-        puts "Enter your User Name."
-        input = gets.chomp
-        User.create(name: input)
-    end
-    def log_in
+require 'tty-prompt'
+current_user = nil
+def create_user
+    puts "Enter your User Name."
+    input = gets.chomp
+    User.create(name: input)
+end
+def log_in
+    prompt = TTY::Prompt.new
         puts "Select a user to log into"
-        User.all.each_with_index{|user, index| puts "#{index}. #{user.name}"}
-        input = gets.chomp
-        $current_user = User.find_by(id: input)
+        choices = User.all.map{|user| user.name}
+        select_user = prompt.select("Select a user to log in", choices)
+        $current_user = User.find_by(name: select_user)
         user_menu($current_user)
     end
     def welcome
-        puts "Welcome to Playlister!  Would you like to log-in or create a new user?"
-        puts "1. Log-in"
-        puts "2. Create New"
-        input = gets.chomp
-        if input == '1'
+        prompt = TTY::Prompt.new
+        menu_select = prompt.select("Welcome to Playlister!", %w(Log-in Create-User))
+        if menu_select == 'Log-in'
             log_in
-        elsif input == '2'
+        elsif menu_select == 'Create-User'
             $current_user = create_user
-        else
-            puts "Please enter '1' or '2'."
-            welcome
         end
     end
 
-    def view_playlists
-        #pull playlists table
-        #Option to view selected playlist
-        #display_playlist
+    def view_playlists (current_user)
+        prompt = TTY::Prompt.new
+        current_playlists = CurrentUser.find_playlists(current_user.id)
+        
+        selected = prompt.select("Select a playlist", current_playlists.map{|playlist| playlist.name})
+        # binding.pry
     end
 
     def user_menu (current_user)
+        prompt = TTY::Prompt.new
         puts "Welcome, #{current_user.name}"
-        puts "What would you like to do?"
-        puts "1. View Playlists"
-        puts "2. Create Playlist"
-        puts "3. Search For Songs"
-        puts "4. Log-out"
-        input = gets.chomp
-        if input == '1'
-            CurrentUser.find_playlists(current_user.id)
-        elsif input == '2'
+        choices = ["View Playlists", "Create Playlist", "Delete Playlist", "Search For Songs", "Log-out"]
+        user_menu_select = prompt.select("What would you like to do?", choices)
+        if user_menu_select == 'View Playlists'
+            view_playlists (current_user)
+        elsif user_menu_select == 'Create Playlist'
             puts "What would you like to call this playlist?"
             playlist_name = gets.chomp
             CurrentUser.create_playlist(current_user.id, playlist_name)
-        elsif input == '3'
+        elsif user_menu_select == 'Delete Playlist'
+            choices = CurrentUser.find_playlists(current_user.id).map{|playlist| playlist.name}
+            playlist_select = prompt.select("Which Playlist would you like to delete?", choices)           
+            CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
+        elsif user_menu_select == 'Search For Songs'
             Search.search_menu
         elsif input == '4'
             welcome
-        else
-            puts "Enter a valid command."
         end
 
     end
