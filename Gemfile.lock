@@ -87,6 +87,7 @@ DEPENDENCIES
   activerecord (~> 5.2)
   json (~> 2.2)
   nokogiri (~> 1.10)
+  pastel
   pry
   require_all
   rest-client (~> 2.0)
