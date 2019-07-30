@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2019_07_30_035649) do
     t.string "album"
     t.string "genre"
     t.string "year"
+    t.integer "playlist_id"
   end
 
   create_table "users", force: :cascade do |t|
