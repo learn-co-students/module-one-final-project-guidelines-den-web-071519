@@ -10,3 +10,5 @@ require_all 'lib'
 # if key == 'y'
 #     binding.pry
 # end
+
+binding.pry
