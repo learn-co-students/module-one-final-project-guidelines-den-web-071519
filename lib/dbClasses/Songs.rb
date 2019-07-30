@@ -4,7 +4,6 @@ class Song < ActiveRecord::Base
                     artist: artist, 
                     album: album, 
                     genre: genre, 
-                    year: year,
-                    playlist_id: playlist_id)
+                    year: year)
     end
 end
