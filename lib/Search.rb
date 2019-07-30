@@ -5,25 +5,20 @@ require 'pry'
 class Search
 
     def self.search_menu
-        puts "What would you like to search for?"
-        puts "1. Search Song"
-        puts "2. Search Artist"
-        puts "3. Search Album"
-        input = gets.chomp
-        if input == '1'
+        prompt = TTY::Prompt.new
+        choices = ["Search Song", "Search Artists", "Search Albums"]
+        search_select = prompt.select("What would you like to search for?", choices)
+        if search_select == 'Search Song'
             Search.search_any('track')
-        elsif input == '2'
+        elsif search_select == 'Search Artists'
             Search.search_any('artist')
-        elsif input == '3'
+        elsif search_select == 'Search Albums'
             Search.search_any('album')
-        else
-            puts "Enter a valid command."
-            search_menu
         end
-    
     end
 
     def self.search_any search_type
+        prompt = TTY::Prompt.new
         base_url = 'https://api.spotify.com/v1/'
         newUrl = base_url + 'search'
         puts "Enter a #{search_type}."
@@ -38,15 +33,19 @@ class Search
                 tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: item['album']['name'], year: item['album']['release_date'].first(4)}
                 display_tracks << tracks_hash
             end
-            display_tracks.each_with_index do |track, index| 
-                puts "#{index + 1}. #{track[:title]} - #{track[:artist]} - #{track[:album]}"
+            choices = display_tracks.map.with_index(1) do |track| 
+                "#{track[:title]} - #{track[:artist]} - #{track[:album]}"
             end
-            puts "Select a song or perform new search"
-            song_select = gets.chomp
-            selected_song = display_tracks[song_select.to_i]
-            puts "#{selected_song[:title]} - #{selected_song[:artist]}"
-            #add song saver method here !!!
-            # binding.pry
+            selected_song = prompt.enum_select("Select a song or perform new search", choices)
+            puts selected_song
+            song_index = choices.index{|song| song == selected_song}
+            yes_or_no = prompt.yes?("Save this song to a playlist?")
+            if yes_or_no == true
+                current_song = display_tracks[song_index]
+                # binding.pry
+                Song.create(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
+            end
+            binding.pry
         elsif search_type == 'artist'
             display_artists = parsed['artists']['items'].map{|artist| artist['name']}
             display_artists
