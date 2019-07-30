@@ -11,3 +11,5 @@ gem "json", "~> 2.2"
 gem "nokogiri", "~> 1.10"
 gem 'tty-prompt', '~> 0.18.1'
 gem 'pastel'
+gem 'youtube-dl.rb', '~> 0.3.1.2016.09.11.1'
+gem 'mpv', '~> 3.0', '>= 3.0.1'

@@ -11,4 +11,4 @@ require_all 'lib'
 #     binding.pry
 # end
 
-# binding.pry
+binding.pry
