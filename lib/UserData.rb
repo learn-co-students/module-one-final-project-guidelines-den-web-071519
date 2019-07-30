@@ -5,11 +5,15 @@ require 'pry'
 class CurrentUser
     
     def self.find_playlists id
-     Playlist.where(id: id)
+     Playlist.where(user_id: id)
+    end
+    
+    def self.find_playlist_id name
+        Playlist.where(name: name).first.id
     end
 
     def self.create_playlist id, name
-        Playlist.create(id: id, name: name)
+        Playlist.create(user_id: id, name: name)
     end
 
     def self.playlist_songs playlist_id
