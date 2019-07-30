@@ -5,12 +5,26 @@ require 'pry'
 class Search
     attr_accessor :name, :playlists, :token
 
-    def initialize name
-        @name = name
-        # @token = GetData.access_token
+    def self.search_menu
+        puts "What would you like to search for?"
+        puts "1. Search Song"
+        puts "2. Search Artist"
+        puts "3. Search Album"
+        input = gets.chomp
+        if input == '1'
+            Search.search_any('track')
+        elsif input == '2'
+            Search.search_any('artist')
+        elsif input == '3'
+            Search.search_any('album')
+        else
+            puts "Enter a valid command."
+            search_menu
+        end
+    
     end
 
-    def search_any search_type
+    def self.search_any search_type
         base_url = 'https://api.spotify.com/v1/'
         newUrl = base_url + 'search'
         puts "Enter a #{search_type}."
