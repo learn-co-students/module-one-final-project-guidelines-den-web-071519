@@ -3,7 +3,6 @@ require 'json'
 require 'pry'
 
 class Search
-    attr_accessor :name, :playlists, :token
 
     def self.search_menu
         puts "What would you like to search for?"
@@ -35,11 +34,19 @@ class Search
         
         if search_type == 'track'
             display_tracks = []
-            parsed['tracks']['items'].each_with_index do |item|
-                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: item['album']['name']}
+            parsed['tracks']['items'].each do |item|
+                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: item['album']['name'], year: item['album']['release_date'].first(4)}
                 display_tracks << tracks_hash
             end
-            display_tracks
+            display_tracks.each_with_index do |track, index| 
+                puts "#{index + 1}. #{track[:title]} - #{track[:artist]} - #{track[:album]}"
+            end
+            puts "Select a song or perform new search"
+            song_select = gets.chomp
+            selected_song = display_tracks[song_select.to_i]
+            puts "#{selected_song[:title]} - #{selected_song[:artist]}"
+            #add song saver method here !!!
+            binding.pry
         elsif search_type == 'artist'
             display_artists = parsed['artists']['items'].map{|artist| artist['name']}
             display_artists

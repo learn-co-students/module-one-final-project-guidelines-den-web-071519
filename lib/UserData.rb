@@ -21,6 +21,6 @@ end
 
 
 
-puts CurrentUser.find_playlists 0
+# puts CurrentUser.find_playlists 0
 
-binding.pry
+# binding.pry

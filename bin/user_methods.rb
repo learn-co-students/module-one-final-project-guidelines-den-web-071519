@@ -11,6 +11,7 @@ require 'pry'
         User.all.each_with_index{|user, index| puts "#{index}. #{user.name}"}
         input = gets.chomp
         $current_user = User.find_by(id: input)
+        user_menu($current_user)
     end
     def welcome
         puts "Welcome to Playlister!  Would you like to log-in or create a new user?"
@@ -42,12 +43,14 @@ require 'pry'
         puts "4. Log-out"
         input = gets.chomp
         if input == '1'
-            #plug in view_playlists method here
+            CurrentUser.find_playlists(current_user.id)
         elsif input == '2'
-            #plug in create_playlist method here
+            puts "What would you like to call this playlist?"
+            playlist_name = gets.chomp
+            CurrentUser.create_playlist(current_user.id, playlist_name)
         elsif input == '3'
-            #plug in search_any method here
-        elseif input == '4'
+            Search.search_menu
+        elsif input == '4'
             welcome
         else
             puts "Enter a valid command."
