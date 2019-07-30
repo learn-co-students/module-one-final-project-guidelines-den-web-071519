@@ -28,6 +28,3 @@ class CurrentUser
 
 end
 
-
-
-# puts CurrentUser.find_playlists 0
