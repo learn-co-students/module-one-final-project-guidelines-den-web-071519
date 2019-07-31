@@ -6,7 +6,8 @@ current_user = nil
 def create_user
     puts "Enter your User Name."
     input = gets.chomp
-    CurrentUser.make_user(input)
+    $current_user = CurrentUser.make_user(input)
+    user_menu($current_user)
 end
 
 def log_in
@@ -29,12 +30,18 @@ def log_in
     end
 
     def view_playlists (current_user)
+        # binding.pry
         prompt = TTY::Prompt.new
-        user = User.where(name: current_user.name)
+        user = User.where(name: current_user.name).first
         current_playlists = user.playlists
         
         selected = prompt.select("Select a playlist", current_playlists.map{|playlist| playlist.name})
-        # binding.pry
+        playlist_songs = Playlist.where(name: selected).where(user_id: current_user.id).first.songs
+        choices = playlist_songs.map{|song| song.title}
+        # selected_playlist_id = Playlist.where(user_id: current_user.id).where(name: selected).first.id
+        # playlist_songs = Playlistsong.where(playlist_id: selected_playlist_id)
+        # choices = playlist_songs.map{|song| song.name}
+        binding.pry
     end
 
     def user_menu (current_user)
@@ -42,25 +49,27 @@ def log_in
         puts "Welcome, #{current_user.name}"
         choices = ["View Playlists", "Create Playlist", "Delete Playlist", "Search For Songs", "Log-out"]
         user_menu_select = prompt.select("What would you like to do?", choices)
-        if user_menu_select == 'View Playlists'
-            view_playlists (current_user)
-        elsif user_menu_select == 'Create Playlist'
-            puts "What would you like to call this playlist?"
-            playlist_name = gets.chomp
-            CurrentUser.create_playlist(current_user.id, playlist_name)
-        elsif user_menu_select == 'Delete Playlist'
-            user = User.where(name: current_user.name)
-            choices = user.playlists.map{|playlist| playlist.name}
-            playlist_select = prompt.select("Which Playlist would you like to delete?", choices)           
-            #CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
-        elsif user_menu_select == 'Search For Songs'
-            Search.search_menu
-        elsif input == '4'
-            welcome
+        loop do
+            case user_menu_select
+                when 'View Playlists'
+                    view_playlists ($current_user)
+                when 'Create Playlist'
+                    puts "What would you like to call this playlist?"
+                    playlist_name = gets.chomp
+                    CurrentUser.create_playlist(current_user.id, playlist_name)
+                when 'Delete Playlist'
+                    user = User.where(name: current_user.name)
+                    choices = user.playlists.map{|playlist| playlist.name}
+                    playlist_select = prompt.select("Which Playlist would you like to delete?", choices)           
+                    #CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
+                when 'Search For Songs'
+                    Search.search_menu
+                when 'Log-out'
+                    welcome
+            end
         end
-
     end
 
-    # welcome
+    welcome
 
     binding.pry

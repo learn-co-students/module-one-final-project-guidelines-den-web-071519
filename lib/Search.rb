@@ -9,11 +9,12 @@ class Search
         prompt = TTY::Prompt.new
         choices = ["Track", "Artist", "Album"]
         search_select = prompt.select("What would you like to search for?", choices)
-        if search_select == 'Track'
+        case search_select
+            when 'Track'
             Search.search_track(search_select.downcase)
-        elsif search_select == 'Artist'
+            when 'Artist'
             Search.search_artist(search_select.downcase)
-        elsif search_select == 'Album'
+            when 'Album'
             Search.search_album(search_select.downcase)
         end
     end
@@ -31,8 +32,7 @@ class Search
                 tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: album_name, year: album_year}
                 display_tracks << tracks_hash
             end
-        end
-        
+        end        
         choices = display_tracks.map.with_index(1) do |track| 
             "#{track[:title]} - #{track[:artist]} - #{track[:album]}"
         end
@@ -49,8 +49,8 @@ class Search
 
     def self.search_track(search_type)
         prompt = TTY::Prompt.new
-        choose_playlist = CurrentUser.find_playlists($current_user.name)
-        users_playlists = choose_playlist.map{|playlist| playlist.name}
+        user = User.where(name: $current_user.name).first
+        users_playlists = user.playlists.map{|playlist| playlist.name}
         puts "Enter a Song Name"
         user_input = gets.chomp.gsub(' ', '%20')
         rest_client = RestClient.get(@@base_url + "/search?q=#{user_input}&type=#{search_type}&limit=10",
@@ -62,8 +62,8 @@ class Search
     
     def self.search_artist(search_type)
         prompt = TTY::Prompt.new
-        choose_playlist = CurrentUser.find_playlists($current_user.name)
-        users_playlists = choose_playlist.map{|playlist| playlist.name}
+        user = User.where(name: $current_user.name).first
+        users_playlists = user.playlists.map{|playlist| playlist.name}
         puts "Enter an Artist Name"
         user_input = gets.chomp.gsub(' ', '%20')
         rest_client = RestClient.get(@@base_url + "/search?q=#{user_input}&type=#{search_type}&limit=10",
@@ -81,7 +81,7 @@ class Search
             top_tracks_response = JSON.parse(tt_rest_client)
             top_tracks_parse = top_tracks_response['tracks']
             Search.tracks_select(top_tracks_parse, users_playlists)
-        elsif top_tracks_or_albums == 'Albums'
+        else
             @@is_album = true
             arist_album_rest_client = RestClient.get(@@base_url + "/artists/#{artist_id}/albums/",
                     'Authorization' => "Bearer #{GetData.access_token}")
@@ -103,8 +103,8 @@ class Search
     def self.search_album(search_type)
         prompt = TTY::Prompt.new
         @@is_album = true
-        choose_playlist = CurrentUser.find_playlists($current_user.name)
-        users_playlists = choose_playlist.map{|playlist| playlist.name}
+        user = User.where(name: $current_user.name).first
+        users_playlists = user.playlists.map{|playlist| playlist.name}
         puts "Enter an Album Name"
         user_input = gets.chomp.gsub(' ', '%20')
         album_rest_client = RestClient.get(@@base_url + "/search?q=#{user_input}&type=#{search_type}&limit=10",
