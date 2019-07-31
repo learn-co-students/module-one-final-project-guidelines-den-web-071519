@@ -3,24 +3,11 @@ require 'json'
 require 'pry'
 
 class CurrentUser
-    def self.find_playlists name
-        inputId = User.where(name: name).first.id 
-        Playlist.where(user_id: inputId)
-    end
-    
-    def self.get_playlist_id username, playlistName
-        userId = User.where(name: username).first.id 
-        Playlist.where(name: playlistName).where(user_id: userId)
-    end
-
-    def self.find_playlist_id name #need to take this one out, use the one above if you need a playlist id^
-        Playlist.where(name: name).first.id
-    end
-
     def self.make_user name
         User.create(name: name)
         userId = User.where(name: name).first.id
         CurrentUser.create_playlist(name, 'Default Playlist')
+        name
     end
   
     def self.create_playlist username, playlistName
@@ -38,11 +25,6 @@ class CurrentUser
         Playlistsong.create(song_id: song.id, playlist_id: playlistId)
     end
 
-    def self.find_songs username, playlistName #finds songs in a playlist
-        playlistId = CurrentUser.get_playlist_id(username, playlistName)
-        Playlistsong.where(playlist_id: playlistId)
-    end
-  
     def self.delete_playlist username, playlistName
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlist.where(id: playlistId).destroy_all
@@ -52,7 +34,6 @@ class CurrentUser
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId).destroy_all
     end
-end
 
     def self.delete_playlist username, playlistName #deletes playlist and songs
         playlistId = CurrentUser.get_playlist_id(username, playlistName)

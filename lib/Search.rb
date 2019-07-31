@@ -3,6 +3,25 @@ require 'json'
 require 'pry'
 
 class Search
+     
+    @@base_url = "https://api.spotify.com/v1"
+
+    def search(input, type)
+        if type == 'Artist'
+            Search.find_artists(input)
+        elsif type == 'Album'
+            Search.find_albums(input)
+        elsif type == 'Track'
+            Search.find_tracks(input)
+        else
+            puts "invalid type: #{type}"
+        end
+    end
+
+    def self.find_artists artist
+
+    end
+
     def self.search_menu
         prompt = TTY::Prompt.new
         choices = ["Search Song", "Search Artists", "Search Albums"]
