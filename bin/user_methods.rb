@@ -47,12 +47,12 @@ def log_in
         elsif user_menu_select == 'Create Playlist'
             puts "What would you like to call this playlist?"
             playlist_name = gets.chomp
-            CurrentUser.create_playlist(current_user.id, playlist_name)
+            CurrentUser.create_playlist(current_user.name, playlist_name)
         elsif user_menu_select == 'Delete Playlist'
             user = User.where(name: current_user.name)
             choices = user.playlists.map{|playlist| playlist.name}
             playlist_select = prompt.select("Which Playlist would you like to delete?", choices)           
-            #CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
+            CurrentUser.delete_playlist(current_user.name, playlist_select)
         elsif user_menu_select == 'Search For Songs'
             Search.search_menu
         elsif input == '4'
