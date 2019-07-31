@@ -17,6 +17,12 @@ class CurrentUser
         Playlist.where(name: name).first.id
     end
 
+    def self.make_user name
+        User.create(name: name)
+        userId = User.where(name: name).first.id
+        CurrentUser.create_playlist(name, 'Default Playlist')
+    end
+
     def self.create_playlist username, playlistName
         inputId = User.where(name: username).first.id
         if Playlist.where(user_id: inputId).where(name: playlistName).count == 0
@@ -66,7 +72,5 @@ class CurrentUser
         end
         User.where(name: username).destroy_all
     end
-
     
-end
-
+en
