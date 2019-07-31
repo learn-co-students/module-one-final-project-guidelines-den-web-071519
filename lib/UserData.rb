@@ -32,17 +32,18 @@ class CurrentUser
         Playlistsong.create(song_id: song.id, playlist_id: playlistId)
     end
 
-    def self.find_songs username, playlistName
+    def self.find_songs username, playlistName #finds songs in a playlist
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId)
     end
 
-    def self.delete_playlist username, playlistName
+    def self.delete_playlist username, playlistName #deletes playlist and songs
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
-        Playlist.where(id: playlistId).destroy_all
+        CurrentUser.delete_playlist_songs(username, playlistName)
+        Playlist.where(id: playlistId).destroy_all   
     end
 
-    def self.delete_playlist_songs username, playlistName
+    def self.delete_playlist_songs username, playlistName #deletes songs from a playlist (but leaves playlist)
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId).destroy_all
     end
