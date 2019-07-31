@@ -7,18 +7,20 @@ class Search
     @@base_url = "https://api.spotify.com/v1"
     def self.search_menu
         prompt = TTY::Prompt.new
-        choices = ["Track", "Artist", "Album"]
+        choices = ["Track", "Artist", "Album", "Back"]
         search_select = prompt.select("What would you like to search for?", choices)
         case search_select
-            when 'Track'
+        when 'Track'
             Search.search_track(search_select.downcase)
-            when 'Artist'
+        when 'Artist'
             Search.search_artist(search_select.downcase)
-            when 'Album'
+        when 'Album'
             Search.search_album(search_select.downcase)
+        when 'Back'
+            user_menu($current_user)
         end
     end
-
+    
     def self.tracks_select (track_parse, users_playlists, album_name = nil, album_year = nil)
         prompt = TTY::Prompt.new
         display_tracks = []
@@ -36,14 +38,16 @@ class Search
         choices = display_tracks.map.with_index(1) do |track| 
             "#{track[:title]} - #{track[:artist]} - #{track[:album]}"
         end
-        selected_song = prompt.enum_select("Select a song or perform new search", choices)
+        selected_song = prompt.select("Select a song or perform new search", choices)
         puts selected_song
         song_index = choices.index{|song| song == selected_song}
         yes_or_no = prompt.select("Save this song to a playlist?", %w[Yes No])
         if yes_or_no == 'Yes'
+            binding.pry
             selected_playlist = prompt.select("Select a playlist to add this song to", users_playlists)
             current_song = display_tracks[song_index]
             CurrentUser.save_song(current_song, $current_user.name, selected_playlist)
+            puts "Saved Song to Playlist!"
         end
     end
 
