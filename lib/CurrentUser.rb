@@ -4,10 +4,11 @@ require 'pry'
 
 class CurrentUser
     def self.make_user name
-        User.create(name: name)
-        userId = User.where(name: name).first.id
-        CurrentUser.create_playlist(name, 'Default Playlist')
-        name
+        if User.where(user_id: name) == nil
+            User.create(name: name)
+            CurrentUser.create_playlist(name, 'Default Playlist')
+            name
+        end
     end
   
     def self.create_playlist username, playlistName
@@ -23,11 +24,6 @@ class CurrentUser
         song = Song.create(title: h[:title], artist: h[:artist], album: h[:album], genre: h[:genre], year: h[:year]) #adds songs, attr values nil by default
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.create(song_id: song.id, playlist_id: playlistId)
-    end
-
-    def self.delete_playlist username, playlistName
-        playlistId = CurrentUser.get_playlist_id(username, playlistName)
-        Playlist.where(id: playlistId).destroy_all
     end
 
     def self.delete_playlist_songs username, playlistName
