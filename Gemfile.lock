@@ -13,9 +13,6 @@ GEM
       minitest (~> 5.1)
       tzinfo (~> 1.1)
     arel (9.0.0)
-    climate_control (0.2.0)
-    cocaine (0.6.0)
-      terrapin (= 0.6.0)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     domain_name (0.5.20190701)
@@ -32,7 +29,6 @@ GEM
     mime-types-data (3.2019.0331)
     mini_portile2 (2.4.0)
     minitest (5.11.3)
-    mpv (3.0.1)
     mustermann (1.0.3)
     necromancer (0.4.0)
     netrc (0.11.0)
@@ -47,6 +43,7 @@ GEM
     rack (2.0.7)
     rack-protection (2.0.5)
       rack
+    rainbow (3.0.0)
     require_all (2.0.0)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
@@ -61,8 +58,6 @@ GEM
       activerecord (>= 3.2)
       sinatra (>= 1.0)
     sqlite3 (1.4.1)
-    terrapin (0.6.0)
-      climate_control (>= 0.0.3, < 1.0)
     thread_safe (0.3.6)
     tilt (2.0.9)
     timers (4.3.0)
@@ -85,8 +80,6 @@ GEM
       unf_ext
     unf_ext (0.0.7.6)
     wisper (2.0.0)
-    youtube-dl.rb (0.3.1.2016.09.11.1)
-      cocaine (>= 0.5.4)
 
 PLATFORMS
   ruby
@@ -94,16 +87,15 @@ PLATFORMS
 DEPENDENCIES
   activerecord (~> 5.2)
   json (~> 2.2)
-  mpv (~> 3.0, >= 3.0.1)
   nokogiri (~> 1.10)
   pastel
   pry
+  rainbow (~> 3.0)
   require_all
   rest-client (~> 2.0)
   sinatra-activerecord
   sqlite3
   tty-prompt (~> 0.18.1)
-  youtube-dl.rb (~> 0.3.1.2016.09.11.1)
 
 BUNDLED WITH
    1.17.3

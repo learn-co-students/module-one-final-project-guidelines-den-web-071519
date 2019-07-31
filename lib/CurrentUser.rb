@@ -31,6 +31,7 @@ class CurrentUser
         else
             song = Song.where(title: h[:title]).where(artist: h[:artist]).first
         end
+        # binding.pry
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.create(song_id: song.id, playlist_id: playlistId)
     end
@@ -60,7 +61,8 @@ class CurrentUser
         songId = Song.where(title: songTitle).first.id
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         if songId != nil
-            Playlistsong.where(playlist_id: playlistId).where(song_id: songId).destroy_all
+            delete_id = Playlistsong.where(playlist_id: playlistId).where(song_id: songId).first.id
+            Playlistsong.destroy(delete_id)
         end
     end
 
