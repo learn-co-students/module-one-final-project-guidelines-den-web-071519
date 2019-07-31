@@ -4,6 +4,8 @@ require 'tty-prompt'
 
 current_user = nil
 def create_user
+    system("clear")
+    Screen.main_title
     puts "Enter your User Name."
     input = gets.chomp
     $current_user = CurrentUser.make_user(input)
@@ -11,6 +13,8 @@ def create_user
 end
 
 def log_in
+    system "clear"
+    Screen.main_title
     prompt = TTY::Prompt.new
         puts "Select a user to log into"
         choices = User.all.map{|user| user.name}
@@ -20,16 +24,22 @@ def log_in
     end
     
     def welcome
+        system "clear"
+        Screen.main_title
         prompt = TTY::Prompt.new
-        menu_select = prompt.select("Welcome to Playlister!", %w(Log-in Create-User))
+        menu_select = prompt.select("", ["Log-in", "Create-User", "Exit"])
         if menu_select == 'Log-in'
             log_in
         elsif menu_select == 'Create-User'
             $current_user = create_user
+        else
+            exit!
         end
     end
 
     def view_playlists (current_user)
+        system "clear"
+        Screen.main_title
         prompt = TTY::Prompt.new
         user = User.where(name: current_user.name).first
         current_playlists = user.playlists
@@ -37,6 +47,9 @@ def log_in
         if selected == 'Back'
             user_menu(current_user)
         else
+            system "clear"
+            Screen.main_title
+            puts "Viewing Playlist #{selected}"
             playlist_songs = Playlist.where(name: selected).where(user_id: current_user.id).first.songs
             choices = playlist_songs.map{|song| "#{song.title} - #{song.artist} - #{song.album}"}
             selected_song = prompt.select("Choose a Song", choices, 'Back')
@@ -46,7 +59,6 @@ def log_in
                 puts selected_song
                 yes_or_no = prompt.yes?("Delete Song?")
                 song_name = selected_song.split("-").first.strip
-                binding.pry
             end
             if yes_or_no == true
                 CurrentUser.delete_specific_song(current_user.name, selected, song_name)
@@ -57,6 +69,8 @@ def log_in
     end
 
     def user_menu (current_user)
+        system "clear"
+        Screen.main_title
         prompt = TTY::Prompt.new
         puts "Welcome, #{current_user.name}"
         choices = ["View Playlists", "Create Playlist", "Delete Playlist", "Search For Songs", "Log-out"]
@@ -90,6 +104,5 @@ def log_in
         end
     end
 
+    
     welcome
-
-    binding.pry
