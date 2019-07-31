@@ -23,6 +23,9 @@ class Search
                  'Authorization' => "Bearer #{GetData.access_token}")
         parsed = JSON.parse(checker)
         
+        choose_playlist = CurrentUser.find_playlists($current_user.name)
+        users_playlists = choose_playlist.map{|playlist| playlist.name}
+        
         if search_type == 'track'
             display_tracks = []
             parsed['tracks']['items'].each do |item|
@@ -34,13 +37,13 @@ class Search
             end
             selected_song = prompt.enum_select("Select a song or perform new search", choices)
             puts selected_song
-            song_index = choices.select{|song| song == selected_song}
-            yes_or_no = prompt.yes?("Save this song to a playlist?")
-            if yes_or_no == true
-                prompt.select("Select a playlist to add this song to", )
+            song_index = choices.index{|song| song == selected_song}
+            yes_or_no = prompt.select("Save this song to a playlist?", %w[Yes No])
+            if yes_or_no == 'Yes'
+                selected_playlist = prompt.select("Select a playlist to add this song to", users_playlists)
                 current_song = display_tracks[song_index]
-                # binding.pry
-                Song.create(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
+                CurrentUser.save_song(current_song, $current_user.name, selected_playlist)
+                # Song.create(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
             end
         elsif search_type == 'artist'
             artist_results = parsed['artists']['items']
@@ -54,7 +57,6 @@ class Search
                 checker = RestClient.get("https://api.spotify.com/v1/artists/#{artist_id}/top-tracks?country=ES",
                           'Authorization' => "Bearer #{GetData.access_token}")
                 top_tracks_parse = JSON.parse(checker)
-                # binding.pry
                 top_tracks_display = []
                 top_tracks_parse['tracks'].each do |item|
                     top_tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: item['album']['name'], year: item['album']['release_date'].first(4)}
@@ -63,15 +65,15 @@ class Search
                 choices = top_tracks_display.map.with_index(1) do |track| 
                     "#{track[:title]} - #{track[:artist]} - #{track[:album]}"
                 end
-                # binding.pry
                 selected_song = prompt.enum_select("Select a song or perform new search", choices)
                 puts selected_song
                 song_index = choices.select{|song| song == selected_song}
-                yes_or_no = prompt.yes?("Save this song to a playlist?")
-                if yes_or_no == true
-                    prompt.select("Select a playlist to add this song to", )
+                yes_or_no = prompt.select("Save this song to a playlist?", %w[Yes, No])
+                if yes_or_no == 'Yes'
+                    
+                    prompt.select("Select a playlist to add this song to", choose_playlist)
                     current_song = display_tracks[song_index]
-                    Song.create(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
+                    CurrentUser.save_song(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
                 end
             elsif top_tracks_or_albums == 'Albums'
                 base_url = "https://api.spotify.com/v1/"
@@ -95,7 +97,6 @@ class Search
                 choices = album_tracks_display.map.with_index(1) do |track| 
                     "#{track[:title]} - #{track[:artist]} - #{track[:album]}"
                 end
-                # binding.pry
                 selected_song = prompt.enum_select("Select a song or perform new search", choices)
                 puts selected_song
                 song_index = choices.select{|song| song == selected_song}
@@ -105,7 +106,6 @@ class Search
                     current_song = display_tracks[song_index]
                     Song.create(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
                 end
-                binding.pry
             end
         elsif search_type == 'album'
             display_albums = parsed['albums']['items'].map{|album| album['name']}
@@ -113,7 +113,6 @@ class Search
             display_albums = album_results.map{|album| "#{album['name']} - #{album['artists'][0]['name']}"}
             selected_album = prompt.select("Select an Album", display_albums)
             album_index = display_albums.index{|album| album == selected_album}
-            # binding.pry
             album_id = album_results[album_index]['id']
             base_url = "https://api.spotify.com/v1/"
                 checker = RestClient.get("https://api.spotify.com/v1/albums/#{album_id}/tracks",

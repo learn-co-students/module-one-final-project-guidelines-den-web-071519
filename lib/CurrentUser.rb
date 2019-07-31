@@ -5,7 +5,7 @@ require 'pry'
 class CurrentUser
     def self.find_playlists name
         inputId = User.where(name: name).first.id 
-        Playlist.where(user_id: inputId).first.id
+        Playlist.where(user_id: inputId)
     end
     
     def self.get_playlist_id username, playlistName
