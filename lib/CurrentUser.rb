@@ -22,7 +22,7 @@ class CurrentUser
         userId = User.where(name: name).first.id
         CurrentUser.create_playlist(name, 'Default Playlist')
     end
-
+  
     def self.create_playlist username, playlistName
         inputId = User.where(name: username).first.id
         if Playlist.where(user_id: inputId).where(name: playlistName).count == 0
@@ -42,6 +42,17 @@ class CurrentUser
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId)
     end
+  
+    def self.delete_playlist username, playlistName
+        playlistId = CurrentUser.get_playlist_id(username, playlistName)
+        Playlist.where(id: playlistId).destroy_all
+    end
+
+    def self.delete_playlist_songs username, playlistName
+        playlistId = CurrentUser.get_playlist_id(username, playlistName)
+        Playlistsong.where(playlist_id: playlistId).destroy_all
+    end
+end
 
     def self.delete_playlist username, playlistName #deletes playlist and songs
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
@@ -73,4 +84,4 @@ class CurrentUser
         User.where(name: username).destroy_all
     end
     
-en
+end

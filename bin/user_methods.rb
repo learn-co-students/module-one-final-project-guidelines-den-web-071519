@@ -5,7 +5,7 @@ current_user = nil
 def create_user
     puts "Enter your User Name."
     input = gets.chomp
-    User.create(name: input)
+    User.make_user(input)
 end
 def log_in
     prompt = TTY::Prompt.new
