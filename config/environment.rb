@@ -5,10 +5,4 @@ ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/develo
 require_all 'lib'
 
 
-# puts 'enter pry? (y/n)'
-# key = gets.chomp
-# if key == 'y'
-#     binding.pry
-# end
 
-# binding.pry
