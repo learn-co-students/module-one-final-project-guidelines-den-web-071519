@@ -11,6 +11,11 @@ class CurrentUser
         end
     end
   
+    def self.get_playlist_id(username, playlistName)
+        userId = User.where(name: username).first.id
+        Playlist.where(user_id: userId).where(name: playlistName).first.id
+    end
+
     def self.create_playlist username, playlistName
         inputId = User.where(name: username).first.id
         if Playlist.where(user_id: inputId).where(name: playlistName).count == 0
@@ -21,7 +26,11 @@ class CurrentUser
     end
 
     def self.save_song h, username, playlistName # takes in hash, username, playlistName
-        song = Song.create(title: h[:title], artist: h[:artist], album: h[:album], genre: h[:genre], year: h[:year]) #adds songs, attr values nil by default
+        if Song.where(title: h[:title]).where(artist: h[:artist]).count == 0
+            song = Song.create(title: h[:title], artist: h[:artist], album: h[:album], genre: h[:genre], year: h[:year]) #adds songs, attr values nil by default
+        else
+            song = Song.where(title: h[:title]).where(artist: h[:artist]).first
+        end
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.create(song_id: song.id, playlist_id: playlistId)
     end

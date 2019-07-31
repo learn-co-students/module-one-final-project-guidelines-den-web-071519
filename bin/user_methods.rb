@@ -71,6 +71,7 @@ def log_in
                     playlist_name = gets.chomp
                     CurrentUser.create_playlist(current_user.name, playlist_name)
                     user_menu(current_user)
+
                 when 'Delete Playlist'
                     user = User.where(name: current_user.name).first
                     choices = user.playlists.map{|playlist| playlist.name}
