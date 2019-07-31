@@ -49,6 +49,7 @@ def log_in
         puts "Welcome, #{current_user.name}"
         choices = ["View Playlists", "Create Playlist", "Delete Playlist", "Search For Songs", "Log-out"]
         user_menu_select = prompt.select("What would you like to do?", choices)
+      
         loop do
             case user_menu_select
                 when 'View Playlists'
