@@ -5,7 +5,7 @@ require 'pry'
 class CurrentUser
     def self.find_playlists name
         inputId = User.where(name: name).first.id 
-        Playlist.where(user_id: inputId).first.id
+        Playlist.where(user_id: inputId)
     end
     
     def self.get_playlist_id username, playlistName
@@ -43,9 +43,30 @@ class CurrentUser
         Playlist.where(id: playlistId).destroy_all   
     end
 
-    def self.delete_playlist_songs username, playlistName #deletes songs from a playlist (but leaves playlist)
+    def self.delete_playlist_songs username, playlistName #deletes all songs from a playlist (but leaves playlist)
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId).destroy_all
     end
+    
+    def self.delete_specific_song username, playlistName, songTitle
+        songId = Song.where(title: songTitle).first.id
+        playlistId = CurrentUser.get_playlist_id(username, playlistName)
+        if songId != nil
+            Playlistsong.where(playlist_id: playlistId).where(song_id: songId).destroy_all
+        end
+    end
+
+    def self.delete_user username
+        playlistArray = []
+        CurrentUser.find_playlists(username).each_with_index do |value, index|
+            playlistArray << CurrentUser.find_playlists('bob')[index].name
+        end
+        playlistArray.each do |playlist|
+            CurrentUser.delete_playlist(username, playlist)
+        end
+        User.where(name: username).destroy_all
+    end
+
+    
 end
 
