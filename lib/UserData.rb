@@ -13,7 +13,7 @@ class CurrentUser
         Playlist.where(name: playlistName).where(user_id: userId)
     end
 
-    def self.find_playlist_id name
+    def self.find_playlist_id name #need to take this one out, use the one above if you need a playlist id^
         Playlist.where(name: name).first.id
     end
 
@@ -35,6 +35,16 @@ class CurrentUser
     def self.find_songs username, playlistName
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId)
+    end
+
+    def self.delete_playlist username, playlistName
+        playlistId = CurrentUser.get_playlist_id(username, playlistName)
+        Playlist.where(id: playlistId).destroy_all
+    end
+
+    def self.delete_playlist_songs username, playlistName
+        playlistId = CurrentUser.get_playlist_id(username, playlistName)
+        Playlistsong.where(playlist_id: playlistId).destroy_all
     end
 end
 
