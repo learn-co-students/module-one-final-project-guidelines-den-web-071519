@@ -21,7 +21,6 @@ class Search
         prompt = TTY::Prompt.new
         base_url = 'https://api.spotify.com/v1/'
         newUrl = base_url + 'search'
-        puts "Enter a #{search_type}."
         user_input = gets.chomp.gsub(' ', '%20')
         checker = RestClient.get("https://api.spotify.com/v1/search?q=#{user_input}&type=#{search_type}&limit=10",
                  'Authorization' => "Bearer #{GetData.access_token}")
@@ -41,14 +40,24 @@ class Search
             song_index = choices.index{|song| song == selected_song}
             yes_or_no = prompt.yes?("Save this song to a playlist?")
             if yes_or_no == true
+                prompt.select("Select a playlist to add this song to", )
                 current_song = display_tracks[song_index]
                 # binding.pry
                 Song.create(title: current_song.values[0], artist: current_song.values[1], album: current_song.values[2], year: current_song.values[3])
             end
             binding.pry
         elsif search_type == 'artist'
-            display_artists = parsed['artists']['items'].map{|artist| artist['name']}
-            display_artists
+            artist_results = parsed['artists']['items']
+            display_artists = artist_results.map{|artist| artist['name']}
+            selected_artist = prompt.select("Select an Artist", display_artists)
+            binding.pry
+            # display_artists
+            base_url = "https://api.spotify.com/v1/"
+            newUrl = base_url + "artists/#{artist_id}"
+            user_input = gets.chomp.gsub(' ', '%20')
+            checker = RestClient.get("https://api.spotify.com/v1/search?q=#{user_input}&type=#{search_type}&limit=10",
+                 'Authorization' => "Bearer #{GetData.access_token}")
+            parsed = JSON.parse(checker)
                 
         elsif search_type == 'album'
             display_albums = parsed['albums']['items'].map{|album| album['name']}
