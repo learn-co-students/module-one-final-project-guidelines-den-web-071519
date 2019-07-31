@@ -57,9 +57,9 @@ def log_in
                 when 'Create Playlist'
                     puts "What would you like to call this playlist?"
                     playlist_name = gets.chomp
-                    CurrentUser.create_playlist(current_user.id, playlist_name)
+                    CurrentUser.create_playlist(current_user.name, playlist_name)
                 when 'Delete Playlist'
-                    user = User.where(name: current_user.name)
+                    user = User.where(name: current_user.name).first
                     choices = user.playlists.map{|playlist| playlist.name}
                     playlist_select = prompt.select("Which Playlist would you like to delete?", choices)           
                     #CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
