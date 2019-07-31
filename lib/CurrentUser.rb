@@ -26,6 +26,11 @@ class CurrentUser
         Playlistsong.create(song_id: song.id, playlist_id: playlistId)
     end
 
+    def self.get_playlist_id(username, playlistName)
+        userId = User.where(name: username).first.id
+        Playlist.where(user_id: userId).where(name: playlistName).first.id
+    end
+
     def self.delete_playlist_songs username, playlistName
         playlistId = CurrentUser.get_playlist_id(username, playlistName)
         Playlistsong.where(playlist_id: playlistId).destroy_all
