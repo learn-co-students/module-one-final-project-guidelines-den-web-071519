@@ -2,6 +2,7 @@ require 'rest-client'
 require 'json'
 
 class Search
+
     @@is_album = false
     @@base_url = "https://api.spotify.com/v1"
     def self.search_menu

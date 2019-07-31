@@ -1,12 +1,14 @@
 require_relative '../config/environment'
 require 'pry'
 require 'tty-prompt'
+
 current_user = nil
 def create_user
     puts "Enter your User Name."
     input = gets.chomp
     CurrentUser.make_user(input)
 end
+
 def log_in
     prompt = TTY::Prompt.new
         puts "Select a user to log into"
@@ -15,6 +17,7 @@ def log_in
         $current_user = User.find_by(name: select_user)
         user_menu($current_user)
     end
+    
     def welcome
         prompt = TTY::Prompt.new
         menu_select = prompt.select("Welcome to Playlister!", %w(Log-in Create-User))
@@ -27,7 +30,8 @@ def log_in
 
     def view_playlists (current_user)
         prompt = TTY::Prompt.new
-        current_playlists = CurrentUser.find_playlists(current_user.id)
+        user = User.where(name: current_user.name)
+        current_playlists = user.playlists
         
         selected = prompt.select("Select a playlist", current_playlists.map{|playlist| playlist.name})
         # binding.pry
@@ -45,9 +49,10 @@ def log_in
             playlist_name = gets.chomp
             CurrentUser.create_playlist(current_user.id, playlist_name)
         elsif user_menu_select == 'Delete Playlist'
-            choices = CurrentUser.find_playlists(current_user.id).map{|playlist| playlist.name}
+            user = User.where(name: current_user.name)
+            choices = user.playlists.map{|playlist| playlist.name}
             playlist_select = prompt.select("Which Playlist would you like to delete?", choices)           
-            CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
+            #CurrentUser.delete_playlist(CurrentUser.find_playlist_id (playlist_select))
         elsif user_menu_select == 'Search For Songs'
             Search.search_menu
         elsif input == '4'
