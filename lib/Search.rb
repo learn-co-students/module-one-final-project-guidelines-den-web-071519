@@ -35,7 +35,7 @@ class Search
             end
         else
             track_parse.each do |item|
-                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: album_name.split(' - ').first, year: album_year, item['id']}
+                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: album_name.split(' - ').first, year: album_year,track_id: item['id']}
                 display_tracks << tracks_hash
             end
         end        
