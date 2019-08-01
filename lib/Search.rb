@@ -30,12 +30,12 @@ class Search
         display_tracks = []
         if @@is_album == false
             track_parse.each do |item|
-                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: item['album']['name'].split(' - ').first, year: item['album']['release_date'].first(4)}
+                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: item['album']['name'].split(' - ').first, year: item['album']['release_date'].first(4), track_id: item['id']}
                 display_tracks << tracks_hash
             end
         else
             track_parse.each do |item|
-                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: album_name.split(' - ').first, year: album_year}
+                tracks_hash = {title: item['name'], artist: item['artists'][0]['name'], album: album_name.split(' - ').first, year: album_year, item['id']}
                 display_tracks << tracks_hash
             end
         end        
