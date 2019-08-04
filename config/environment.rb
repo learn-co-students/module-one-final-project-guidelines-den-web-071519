@@ -1,5 +1,12 @@
-require 'bundler'
-Bundler.require
+require 'sinatra/activerecord'
+require 'require_all'
+require 'pry'
 
-ActiveRecord::Base.establish_connection(adapter: 'sqlite3', database: 'db/development.db')
 require_all 'lib'
+
+ActiveRecord::Base.establish_connection(
+:adapter => "sqlite3",
+:database => "db/forknite.db"
+)
+
+ActiveRecord::Base.logger = nil

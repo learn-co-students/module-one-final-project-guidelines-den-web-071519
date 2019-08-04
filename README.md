@@ -1,59 +1,44 @@
-# Module One Final Project Guidelines
+![Welcome Screen](https://github.com/jollyjerr/Git_Forknite/blob/master/github/Screen%20Shot%202019-08-02%20at%2010.57.52%20AM.png)
 
-Congratulations, you're at the end of module one! You've worked crazy hard to get here and have learned a ton.
 
-For your final project, we'll be building a Command Line database application.
+# Welcome to Git Forknite!
 
-## Project Requirements
+Enter the world of Git Forknite and battle with your friends in the BASH Royale! Play with 2-5 people and fight until there is only one warrior left standing. Equip yourself with up to 2 weapons and select a spell to enhance your magical powers. Choose wisely, as the power and strategy of these battle tools vary greatly. If you have what it takes, you can become the next #1 BASH Royale champion!
 
-### Option One - Data Analytics Project
+## Installation Instructions:
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have at minimum three models including one join model. This means you must have a many-to-many relationship.
-3. You should seed your database using data that you collect either from a CSV, a website by scraping, or an API.
-4. Your models should have methods that answer interesting questions about the data. For example, if you've collected info about movie reviews, what is the most popular movie? What movie has the most reviews?
-5. You should provide a CLI to display the return values of your interesting methods.  
-6. Use good OO design patterns. You should have separate classes for your models and CLI interface.
+1. Install ruby. 
+ - You can check if Ruby is already installed by running `Ruby -v` in your terminal. If it is installed, you will see a version number.
+2. Fork and clone this repo.
+3. Navigate to the Git-Forknite folder on your local device, then run `bundle` in the terminal to download the necessary Ruby Gems.
+4. To play, run `ruby Git_Forknite.rb` in your terminal.
+5. Have fun!
 
-  **Resource:** [Easy Access APIs](https://github.com/learn-co-curriculum/easy-access-apis)
+### Create player:
+1. Enter your player name
+2. Choose 2 weapons from the list
+3. Choose 1 spell from the list
 
-### Option Two - Command Line CRUD App
+![Create Player](https://github.com/jollyjerr/Git_Forknite/blob/master/github/new-player.gif)
 
-1. Access a Sqlite3 Database using ActiveRecord.
-2. You should have a minimum of three models.
-3. You should build out a CLI to give your user full CRUD ability for at least one of your resources. For example, build out a command line To-Do list. A user should be able to create a new to-do, see all todos, update a todo item, and delete a todo. Todos can be grouped into categories, so that a to-do has many categories and categories have many to-dos.
-4. Use good OO design patterns. You should have separate models for your runner and CLI interface.
+### Battle:
+1. Choose opponent you want to target
+2. Select 1 weapon or spell to use on your target
 
-### Brainstorming and Proposing a Project Idea
+![Battle](https://github.com/jollyjerr/Git_Forknite/blob/master/github/battle.gif)
 
-Projects need to be approved prior to launching into them, so take some time to brainstorm project options that will fulfill the requirements above.  You must have a minimum of four [user stories](https://en.wikipedia.org/wiki/User_story) to help explain how a user will interact with your app.  A user story should follow the general structure of `"As a <role>, I want <goal/desire> so that <benefit>"`. In example, if we were creating an app to randomly choose nearby restaurants on Yelp, we might write:
+### Save profile:
+1. If you win the game, you are given an option to save your profile
+2. Enter your player description to save as your bio
+3. Set a password to be able to log in
+4. Your profile is now saved so you can log back in and level-up
 
-* As a user, I want to be able to enter my name to retrieve my records
-* As a user, I want to enter a location and be given a random nearby restaurant suggestion
-* As a user, I should be able to reject a suggestion and not see that restaurant suggestion again
-* As a user, I want to be able to save to and retrieve a list of favorite restaurant suggestions
+![Save Profile](https://github.com/jollyjerr/Git_Forknite/blob/master/github/save-profile.gif)
 
-## Instructions
+### Edit profile:
+1. If for any reason you would like to edit your profile, you have the option
+2. Log in to your account
+3. Enter password when prompted
+4. Choose what part of your profile you would like to change and follow prompts
 
-1. Fork and clone this repository.
-2. Build your application. Make sure to commit early and commit often. Commit messages should be meaningful (clearly describe what you're doing in the commit) and accurate (there should be nothing in the commit that doesn't match the description in the commit message). Good rule of thumb is to commit every 3-7 mins of actual coding time. Most of your commits should have under 15 lines of code and a 2 line commit is perfectly acceptable.
-3. Make sure to create a good README.md with a short description, install instructions, a contributors guide and a link to the license for your code.
-4. Make sure your project checks off each of the above requirements.
-5. Prepare a video demo (narration helps!) describing how a user would interact with your working project.
-    * The video should:
-      - Have an overview of your project.(2 minutes max)
-6. Prepare a presentation to follow your video.(3 minutes max)
-    * Your presentation should:
-      - Describe something you struggled to build, and show us how you ultimately implemented it in your code.
-      - Discuss 3 things you learned in the process of working on this project.
-      - Address, if anything, what you would change or add to what you have today?
-      - Present any code you would like to highlight.   
-7. *OPTIONAL, BUT RECOMMENDED*: Write a blog post about the project and process.
-
----
-### Common Questions:
-- How do I turn off my SQL logger?
-```ruby
-# in config/environment.rb add this line:
-ActiveRecord::Base.logger = nil
-```
+![Edit Profile](https://github.com/jollyjerr/Git_Forknite/blob/master/github/edit-profile.gif)
